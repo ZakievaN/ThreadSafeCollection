@@ -1,0 +1,8 @@
+.git
+.vs
+ThreadSafeCollection/bin
+ThreadSafeCollection/obj
+Example/bin
+Example/obj
+ThreadSafeCollectionTests/bin
+ThreadSafeCollectionTests/obj
