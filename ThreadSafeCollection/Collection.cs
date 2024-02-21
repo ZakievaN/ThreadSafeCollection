@@ -45,11 +45,13 @@ namespace ThreadSafeCollection
         /// <param name="id">Идентификатор в составном ключе</param>
         /// <param name="name">Имя в составном ключе</param>
         /// <param name="value">Значение</param>
-        public void Add(TId id, TName name, TValue value)
+        /// <returns>True - если элемент добавлен в коллекцию, иначе False</returns>
+        public bool Add(TId id, TName name, TValue value)
         {
             lock (_locker)
             {
-                _collection.Add(new CollectionItem<TId, TName, TValue>(id, name, value));
+                var item = new CollectionItem<TId, TName, TValue>(id, name, value);
+                return _collection.Add(item);
             }
         }
 
