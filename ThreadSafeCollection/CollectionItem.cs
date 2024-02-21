@@ -1,6 +1,4 @@
 ﻿
-using System.Runtime.CompilerServices;
-
 namespace ThreadSafeCollection
 {
     internal class CollectionItem<TId, TName, TValue> : IComparable<CollectionItem<TId, TName, TValue>>
@@ -22,6 +20,8 @@ namespace ThreadSafeCollection
 
         public int CompareTo(CollectionItem<TId, TName, TValue> other)
         {
+            if (other == null) throw new ArgumentNullException(nameof(other));
+
             return Id.CompareTo(other.Id) == 0
                 ? Name.CompareTo(other.Name)
                 : Id.CompareTo(other.Id);
