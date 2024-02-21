@@ -57,6 +57,11 @@ namespace ThreadSafeCollection
 
         #region Методы Remove 
 
+        public void Clear() 
+        {
+            _collection.Clear();
+        }
+
         /// <summary>
         /// Удаление элемента по составному ключу из коллекции
         /// </summary>

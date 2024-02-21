@@ -1,5 +1,5 @@
 ﻿using ThreadSafeCollection;
-
+using System.Diagnostics;
 namespace Example
 {
     internal class Program
@@ -8,26 +8,27 @@ namespace Example
         {
             var list = new Collection<string, string, RegionDetail>();
 
-            Parallel.For(0, 100, LoadData);
+            var startTime = Stopwatch.StartNew();
+            ParallelLoadData();
+            startTime.Stop();
+            Console.WriteLine($"Скорость загрузки {startTime.Elapsed}");
 
-            //Print();
-
-            var startTime = System.Diagnostics.Stopwatch.StartNew();
+            startTime = Stopwatch.StartNew();
             var values = list.GetByKeyName("Московская область");
             startTime.Stop();
             Console.WriteLine($"Скорость получения списка по имени = {startTime.Elapsed}, количество = {values.Count()}");
 
-            startTime = System.Diagnostics.Stopwatch.StartNew();
+            startTime = Stopwatch.StartNew();
             var countRemoved = list.RemoveById("01");
             startTime.Stop();
             Console.WriteLine($"Скорость удаления из списка по id = {startTime.Elapsed}, количество = {countRemoved}");
 
-            startTime = System.Diagnostics.Stopwatch.StartNew();
+            startTime = Stopwatch.StartNew();
             countRemoved = list.RemoveByName("Московская область");
             startTime.Stop();
             Console.WriteLine($"Скорость удаления из списка по имени = {startTime.Elapsed}, количество = {countRemoved}");
 
-            startTime = System.Diagnostics.Stopwatch.StartNew();
+            startTime = Stopwatch.StartNew();
             list.Remove("06", "Московская область");
             startTime.Stop();
             Console.WriteLine($"Скорость удаления из списка по составному ключу = {startTime.Elapsed}");
@@ -40,6 +41,19 @@ namespace Example
                 }
 
                 Console.WriteLine();
+            }
+
+            void ParallelLoadData()
+            {
+                var tasks = new Task[100];
+                for (int i = 0; i < tasks.Length; i++)
+                {
+                    tasks[i] = Task.Run(() =>
+                    {
+                        LoadData(i);
+                    });
+                }
+                Task.WaitAll(tasks);
             }
 
             void LoadData(int i)
